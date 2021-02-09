@@ -5,10 +5,16 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
 const log = require("electron-log");
-const { ipcHandler, execCommand, AVAILABLE_COMMANDS } = require("./ipc");
+const {
+  ipcHandler,
+  execCommand,
+  AVAILABLE_COMMANDS,
+  environmentStartedSub,
+} = require("./ipc");
 const { take } = require("rxjs/operators");
 
 let mainWindow, tray, readyToQuit;
+let environmentStarted;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -43,19 +49,27 @@ function createWindow() {
       handleMainWindowHideActions(e);
     }
   });
-  mainWindow.on("minimize", () => tray.setContextMenu(trayMenuWithShow));
-  mainWindow.on("show", () => tray.setContextMenu(trayMenuWithHide));
+  mainWindow.on("minimize", () => tray.setContextMenu(trayMenuWithShow()));
+  mainWindow.on("show", () => tray.setContextMenu(trayMenuWithHide()));
 }
 
 const handleMoveToTrayNotification = () => {
+  // TODO: prevent message only on 'darwin' when launcher is enabled on all operating systems
+  if (process.platform !== "win32" || !environmentStarted) {
+    return;
+  }
   const notification = {
     title: "OpenDEX is still running",
-    body: "Select shutdown here if you want to shutdown your local environment",
+    body: "Select Shutdown if you want to shut down your local environment",
   };
   new Notification(notification).show();
 };
 
 const handleShutdownNotification = () => {
+  // TODO: remove platform check when launcher is enabled on all operating systems
+  if (process.platform !== "win32" || !environmentStarted) {
+    return;
+  }
   const notification = {
     title: "Shutdown",
     body: "All locally running OpenDEX Docker containers will be stopped",
@@ -82,48 +96,60 @@ const handleShowActions = () => {
 
 const handleHideActions = () => {
   mainWindow.hide();
-  tray.setContextMenu(trayMenuWithShow);
+  tray.setContextMenu(trayMenuWithShow());
 };
 
-const shutdownMenuItem = {
-  label: "Shutdown",
-  click: () => {
-    handleShutdownNotification();
-    handleShutdownActions();
-  },
+const shutdownMenuItem = () => {
+  return {
+    label: environmentStarted ? "Shutdown" : "Quit",
+    click: () => {
+      handleShutdownNotification();
+      handleShutdownActions();
+    },
+  };
 };
 
-const trayMenuWithShow = Menu.buildFromTemplate([
-  {
-    label: "Show",
-    click: () => {
-      handleShowActions();
+const trayMenuWithShow = () => {
+  return Menu.buildFromTemplate([
+    {
+      label: "Show",
+      click: () => {
+        handleShowActions();
+      },
     },
-  },
-  shutdownMenuItem,
-]);
+    shutdownMenuItem(),
+  ]);
+};
 
-const trayMenuWithHide = Menu.buildFromTemplate([
-  {
-    label: "Hide",
-    click: () => {
-      handleHideActions();
+const trayMenuWithHide = () => {
+  return Menu.buildFromTemplate([
+    {
+      label: "Hide",
+      click: () => {
+        handleHideActions();
+      },
     },
-  },
-  shutdownMenuItem,
-]);
+    shutdownMenuItem(),
+  ]);
+};
 
 app
   .whenReady()
   .then(() => {
     tray = new Tray(path.join(__dirname, "./assets/512x512.png"));
-    tray.setContextMenu(trayMenuWithHide);
+    tray.setContextMenu(trayMenuWithHide());
     tray.on("double-click", () => {
       if (mainWindow.isVisible()) {
         handleHideActions();
       } else {
         handleShowActions();
       }
+    });
+    environmentStartedSub.subscribe((value) => {
+      environmentStarted = value;
+      tray.setContextMenu(
+        mainWindow.isVisible() ? trayMenuWithHide() : trayMenuWithShow()
+      );
     });
   })
   .catch((e) => {

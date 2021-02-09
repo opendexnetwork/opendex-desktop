@@ -5,7 +5,7 @@ import { Provider } from "mobx-react";
 import React, { ReactElement } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { isWindows } from "./common/appUtil";
-import { OPENDEX_DOCKER_LOCAL_MAINNET_URL } from "./constants";
+import { OPENDEX_DOCKER_LOCAL_TESTNET_URL } from "./constants";
 import Dashboard from "./dashboard/Dashboard";
 import { Path } from "./router/Path";
 import ConnectToRemote from "./setup/ConnectToRemote";
@@ -59,7 +59,8 @@ const GlobalCss = withStyles((theme: Theme) => {
 })(() => null);
 
 const settingsStore = useSettingsStore({
-  opendexDockerUrl: OPENDEX_DOCKER_LOCAL_MAINNET_URL,
+  // TODO: change to mainnet
+  opendexDockerUrl: OPENDEX_DOCKER_LOCAL_TESTNET_URL,
 });
 
 const dockerStore = useDockerStore({

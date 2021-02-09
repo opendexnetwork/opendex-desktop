@@ -13,7 +13,7 @@ import { catchError, mergeMap, take, takeUntil } from "rxjs/operators";
 import api from "../../api";
 import { logError, logInfo } from "../../common/appUtil";
 import { startOpendexDocker$ } from "../../common/dockerUtil";
-import { OPENDEX_DOCKER_LOCAL_MAINNET_URL } from "../../constants";
+import { OPENDEX_DOCKER_LOCAL_TESTNET_URL } from "../../constants";
 import { ConnectionType } from "../../enums";
 import { Path } from "../../router/Path";
 import { SETTINGS_STORE } from "../../stores/settingsStore";
@@ -43,7 +43,8 @@ const StartingOpendex = inject(SETTINGS_STORE)(
     }, []);
 
     useEffect(() => {
-      settingsStore!.setOpendexDockerUrl(OPENDEX_DOCKER_LOCAL_MAINNET_URL);
+      // TODO: change to mainnet
+      settingsStore!.setOpendexDockerUrl(OPENDEX_DOCKER_LOCAL_TESTNET_URL);
       const apiResponsive$ = interval(1000).pipe(
         mergeMap(() => api.setupStatus$(settingsStore!.opendexDockerUrl)),
         catchError((e, caught) => caught),
@@ -68,6 +69,7 @@ const StartingOpendex = inject(SETTINGS_STORE)(
           },
           complete: () => {
             setProgress(100);
+            (window as any).electron.send("set-environment-started", [true]);
             settingsStore!.setConnectionType(ConnectionType.LOCAL);
             setTimeout(() => setShowContent(false), 500);
             setTimeout(() => history.push(Path.DASHBOARD), 1000);

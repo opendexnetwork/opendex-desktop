@@ -1,7 +1,7 @@
 const { ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const { exec } = require("child_process");
-const { Observable } = require("rxjs");
+const { Observable, BehaviorSubject } = require("rxjs");
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
@@ -36,9 +36,11 @@ const AVAILABLE_COMMANDS = {
   modify_docker_settings: "settings modify",
   wsl_version: "wsl --set-default-version 2",
   start_docker: `"${WINDOWS_DOCKER_EXECUTABLE_PATH}"`,
-  stop_opendex_docker: `${LAUNCHER} down`,
   setup_opendex_docker: `${LAUNCHER} setup`,
+  stop_opendex_docker: `${LAUNCHER} down`,
 };
+
+const environmentStartedSub = new BehaviorSubject(false);
 
 const execCommand = (cmd) => {
   const cmd$ = new Observable((subscriber) => {
@@ -76,7 +78,10 @@ const execCommand = (cmd) => {
         );
       });
     } else {
-      exec(cmd, (error, stdout) => handleResponse(stdout, error));
+      // TODO: remove 'testnet'
+      exec(cmd, { env: { NETWORK: "testnet" } }, (error, stdout) =>
+        handleResponse(stdout, error)
+      );
     }
   });
   return cmd$;
@@ -112,10 +117,14 @@ const ipcHandler = (mainWindow) => {
       });
     }
   });
+  ipcMain.on("set-environment-started", (_e, [value]) => {
+    environmentStartedSub.next(value);
+  });
 };
 
 module.exports = {
   ipcHandler,
   execCommand,
   AVAILABLE_COMMANDS,
+  environmentStartedSub,
 };
