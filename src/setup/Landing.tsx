@@ -35,8 +35,8 @@ const createItems = (envExists?: boolean): Item[] => [
   {
     title: envExists ? "Start" : "Create",
     additionalInfo: envExists
-      ? "OpenDEX environment detected"
-      : "Create new OpenDEX environment",
+      ? "OpenDEX testnet environment detected" // TODO: remove 'testnet'
+      : "Create new OpenDEX testnet environment", // TODO: remove 'testnet'
     icon: envExists ? PlayArrowTwoToneIcon : AddCircleTwoToneIcon,
     path: Path.START_ENVIRONMENT,
   },
