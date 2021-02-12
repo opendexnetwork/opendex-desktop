@@ -79,7 +79,7 @@ const Landing = inject(
 )(
   observer(() => {
     const items: Item[] = createItems(
-      isOpendexDockerEnvCreated(Network.MAINNET)
+      isOpendexDockerEnvCreated(Network.TESTNET) // TODO: change to MAINNET
     );
     const classes = useStyles();
     const history = useHistory();
