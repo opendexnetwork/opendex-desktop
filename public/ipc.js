@@ -37,6 +37,7 @@ const AVAILABLE_COMMANDS = {
   wsl_version: "wsl --set-default-version 2",
   start_docker: `"${WINDOWS_DOCKER_EXECUTABLE_PATH}"`,
   // TODO: windows specific environment variables (will not work for Mac and Linux)
+  // TODO: remove testnet
   setup_opendex_docker: `set BRANCH=21.02.11-rc.2&set NETWORK=testnet&${LAUNCHER} setup`,
   stop_opendex_docker: `set BRANCH=21.02.11-rc.2&set NETWORK=testnet&${LAUNCHER} down`,
 };
