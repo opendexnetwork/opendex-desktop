@@ -71,9 +71,12 @@ Application data is stored in the following locations
 
 ### Building Windows executable under Linux
 
-For Debian based distributions
-
+For Debian based distributions you'll need additional dependencies
 ```bash
 sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine wine32
+```
+
+To build
+```bash
 yarn build --win
 ```
