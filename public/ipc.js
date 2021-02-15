@@ -36,8 +36,9 @@ const AVAILABLE_COMMANDS = {
   modify_docker_settings: "settings modify",
   wsl_version: "wsl --set-default-version 2",
   start_docker: `"${WINDOWS_DOCKER_EXECUTABLE_PATH}"`,
-  setup_opendex_docker: `${LAUNCHER} setup`,
-  stop_opendex_docker: `${LAUNCHER} down`,
+  // TODO: windows specific environment variables (will not work for Mac and Linux)
+  setup_opendex_docker: `set BRANCH=21.02.11-rc.2&set NETWORK=testnet&${LAUNCHER} setup`,
+  stop_opendex_docker: `set BRANCH=21.02.11-rc.2&set NETWORK=testnet&${LAUNCHER} down`,
 };
 
 const environmentStartedSub = new BehaviorSubject(false);
@@ -78,10 +79,7 @@ const execCommand = (cmd) => {
         );
       });
     } else {
-      // TODO: remove 'testnet'
-      exec(cmd, { env: { NETWORK: "testnet" } }, (error, stdout) =>
-        handleResponse(stdout, error)
-      );
+      exec(cmd, (error, stdout) => handleResponse(stdout, error));
     }
   });
   return cmd$;
