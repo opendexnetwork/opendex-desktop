@@ -68,3 +68,12 @@ Application data is stored in the following locations
 ## Building an executable
 
 `yarn build` to build for an OS the command is executed from.
+
+### Building Windows executable under Linux
+
+For Debian based distributions
+
+```bash
+sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine wine32
+yarn build --win
+```
