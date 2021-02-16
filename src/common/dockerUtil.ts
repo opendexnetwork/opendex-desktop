@@ -1,8 +1,8 @@
 import { Observable, of } from "rxjs";
-import { catchError, map, take } from "rxjs/operators";
+import { catchError, map, mapTo, take } from "rxjs/operators";
 import { v4 as uuidv4 } from "uuid";
 import { Network } from "../enums";
-import { logError, logInfo } from "./appUtil";
+import { logError, logInfo, isWindows } from "./appUtil";
 
 const execCommand$ = (command: string): Observable<string> => {
   return new Observable((subscriber) => {
@@ -29,6 +29,7 @@ const execCommand$ = (command: string): Observable<string> => {
 
 const AVAILABLE_COMMANDS = {
   IS_INSTALLED: "docker_version",
+  IS_INSTALLED_COMPOSE: "docker_compose_version",
   IS_RUNNING: "docker_ps",
   DOWNLOAD: "docker_download",
   DOWNLOAD_STATUS: "docker_download_status",
@@ -60,6 +61,42 @@ const isDockerInstalled$ = (): Observable<boolean> => {
         return of(false);
       }
       logError("Error checking Docker installed status:", e);
+      return of(false);
+    })
+  );
+};
+
+const isPermissionDenied$ = (): Observable<boolean> => {
+  return execCommand$(AVAILABLE_COMMANDS.IS_INSTALLED).pipe(
+    mapTo(false),
+    catchError((e: any) => {
+      if (e.message?.includes("permission denied")) {
+        return of(true);
+      }
+      logError("Error checking permission denied:", e);
+      return of(false);
+    })
+  );
+};
+
+const isDockerComposeInstalled$ = (): Observable<boolean> => {
+  return execCommand$(AVAILABLE_COMMANDS.IS_INSTALLED_COMPOSE).pipe(
+    map((output) => {
+      if (output.includes("docker-compose version")) {
+        return true;
+      }
+      return false;
+    }),
+    catchError((e: any) => {
+      if (
+        e.message?.includes(
+          "'docker-compose' is not recognized as an internal or external command"
+        ) ||
+        e.message?.includes("not found")
+      ) {
+        return of(false);
+      }
+      logError("Error checking docker-compose installed status:", e);
       return of(false);
     })
   );
@@ -203,15 +240,19 @@ export type DockerSettings = {
 };
 
 const dockerSettings$ = (): Observable<DockerSettings> => {
-  return execCommand$(AVAILABLE_COMMANDS.SETTINGS).pipe(
-    map((output) => {
-      return (JSON.parse(output) as unknown) as DockerSettings;
-    }),
-    catchError((e: any) => {
-      logError("Error detecting Docker settings:", e);
-      return of({});
-    })
-  );
+  if (isWindows()) {
+    return execCommand$(AVAILABLE_COMMANDS.SETTINGS).pipe(
+      map((output) => {
+        return (JSON.parse(output) as unknown) as DockerSettings;
+      }),
+      catchError((e: any) => {
+        logError("Error detecting Docker settings:", e);
+        return of({});
+      })
+    );
+  } else {
+    return of({});
+  }
 };
 
 const modifyDockerSettings$ = (): Observable<boolean> => {
@@ -227,17 +268,21 @@ const modifyDockerSettings$ = (): Observable<boolean> => {
 };
 
 const isWSL2$ = (): Observable<boolean> => {
-  return execCommand$(AVAILABLE_COMMANDS.WSL_VERSION).pipe(
-    map((output) => {
-      const cleanedOutput = output.replace(/[^\w\s]/gi, "").trim();
-      logInfo("output for isWSL2", cleanedOutput);
-      return !cleanedOutput.includes("requires an update");
-    }),
-    catchError((e: any) => {
-      logError("Error detecting WSL version:", e);
-      return of(false);
-    })
-  );
+  if (isWindows()) {
+    return execCommand$(AVAILABLE_COMMANDS.WSL_VERSION).pipe(
+      map((output) => {
+        const cleanedOutput = output.replace(/[^\w\s]/gi, "").trim();
+        logInfo("output for isWSL2", cleanedOutput);
+        return !cleanedOutput.includes("requires an update");
+      }),
+      catchError((e: any) => {
+        logError("Error detecting WSL version:", e);
+        return of(false);
+      })
+    );
+  } else {
+    return of(true);
+  }
 };
 
 const startOpendexDocker$ = (): Observable<boolean> => {
@@ -269,4 +314,6 @@ export {
   startDocker$,
   startOpendexDocker$,
   isOpendexDockerEnvCreated,
+  isDockerComposeInstalled$,
+  isPermissionDenied$,
 };

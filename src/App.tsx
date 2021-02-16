@@ -4,7 +4,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { Provider } from "mobx-react";
 import React, { ReactElement } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { isWindows } from "./common/appUtil";
+import { isDarwin } from "./common/appUtil";
 import { OPENDEX_DOCKER_LOCAL_TESTNET_URL } from "./constants";
 import Dashboard from "./dashboard/Dashboard";
 import { Path } from "./router/Path";
@@ -20,6 +20,8 @@ import Landing from "./setup/Landing";
 import WaitingDockerStart from "./setup/WaitingDockerStart";
 import { useDockerStore } from "./stores/dockerStore";
 import { useSettingsStore } from "./stores/settingsStore";
+import InstallDockerCompose from "./setup/create/InstallDockerCompose";
+import DockerPermissionDenied from "./setup/create/DockerPermissionDenied";
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -87,8 +89,14 @@ function App(): ReactElement {
             <Route path={Path.DOWNLOAD_DOCKER}>
               <DownloadDocker />
             </Route>
+            <Route path={Path.INSTALL_DOCKER_COMPOSE}>
+              <InstallDockerCompose />
+            </Route>
             <Route path={Path.INSTALL_DOCKER}>
               <InstallDocker />
+            </Route>
+            <Route path={Path.DOCKER_PERMISSION_DENIED}>
+              <DockerPermissionDenied />
             </Route>
             <Route path={Path.STARTING_OPENDEX}>
               <StartingOpendex />
@@ -109,7 +117,7 @@ function App(): ReactElement {
               <DockerNotDetected />
             </Route>
             <Route path={Path.HOME}>
-              {isWindows() ? <Landing /> : <DockerNotDetected />}
+              {isDarwin() ? <DockerNotDetected /> : <Landing />}
             </Route>
           </Switch>
         </Router>

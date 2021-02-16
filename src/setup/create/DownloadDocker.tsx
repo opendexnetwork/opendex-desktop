@@ -6,9 +6,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { downloadDocker$ } from "../../common/dockerUtil";
+import { interval, Subscription } from "rxjs";
+import { filter, mergeMap } from "rxjs/operators";
+import { isLinux, isWindows } from "../../common/appUtil";
+import {
+  downloadDocker$,
+  isDockerInstalled$,
+  isPermissionDenied$,
+} from "../../common/dockerUtil";
 import { Path } from "../../router/Path";
 import LinkToDiscord from "../LinkToDiscord";
 import RowsContainer from "../RowsContainer";
@@ -19,6 +26,9 @@ const useStyles = makeStyles(() =>
     buttonsContainer: {
       minHeight: 90,
     },
+    installLink: {
+      textDecoration: "none",
+    },
   })
 );
 
@@ -26,6 +36,33 @@ const DownloadDocker = (): ReactElement => {
   const history = useHistory();
   const classes = useStyles();
   const [isDownloading, setIsDownloading] = useState(false);
+
+  useEffect(() => {
+    const subs = new Subscription();
+    subs.add(
+      interval(5000)
+        .pipe(
+          mergeMap(() => isDockerInstalled$()),
+          filter((isInstalled) => isInstalled)
+        )
+        .subscribe(() => {
+          history.push(Path.START_ENVIRONMENT);
+        })
+    );
+    subs.add(
+      interval(5000)
+        .pipe(
+          mergeMap(() => isPermissionDenied$()),
+          filter((isPermissionDenied) => isPermissionDenied)
+        )
+        .subscribe(() => {
+          history.push(Path.START_ENVIRONMENT);
+        })
+    );
+    return () => {
+      subs.unsubscribe();
+    };
+  }, [history]);
 
   return (
     <RowsContainer>
@@ -57,20 +94,39 @@ const DownloadDocker = (): ReactElement => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                disableElevation
-                endIcon={<ArrowForwardIcon />}
-                onClick={() => {
-                  setIsDownloading(true);
-                  downloadDocker$().subscribe(() =>
-                    history.push(Path.START_ENVIRONMENT)
-                  );
-                }}
-              >
-                Download Now
-              </Button>
+              {isWindows() && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                  endIcon={<ArrowForwardIcon />}
+                  onClick={() => {
+                    setIsDownloading(true);
+                    downloadDocker$().subscribe(() =>
+                      history.push(Path.START_ENVIRONMENT)
+                    );
+                  }}
+                >
+                  Download Now
+                </Button>
+              )}
+              {isLinux() && (
+                <a
+                  href="https://docs.docker.com/engine/install/"
+                  rel="noopener noreferrer"
+                  className={classes.installLink}
+                  target="_blank"
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disableElevation
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Install Docker
+                  </Button>
+                </a>
+              )}
             </>
           </Grid>
         )}

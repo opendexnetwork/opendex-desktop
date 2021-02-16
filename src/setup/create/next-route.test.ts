@@ -9,10 +9,13 @@ let testScheduler: TestScheduler;
 type CreateFlowState = {
   isDownloaded: boolean;
   isInstalled: boolean;
+  isDockerComposeInstalled: boolean;
   isRunning: boolean;
   rebootRequired: boolean;
   isWSL2: boolean;
   dockerSettings: DockerSettings;
+  isLinux: boolean;
+  isPermissionDenied: boolean;
 };
 
 const assertNextStep = (expectedPath: Path, dockerInfo: CreateFlowState) => {
@@ -25,6 +28,14 @@ const assertNextStep = (expectedPath: Path, dockerInfo: CreateFlowState) => {
       (cold("1s a", { a: dockerInfo.isInstalled }) as unknown) as Observable<
         boolean
       >;
+    const isPermissionDenied = () =>
+      (cold("1s a", {
+        a: dockerInfo.isPermissionDenied,
+      }) as unknown) as Observable<boolean>;
+    const isDockerComposeInstalled = () =>
+      (cold("1s a", {
+        a: dockerInfo.isDockerComposeInstalled,
+      }) as unknown) as Observable<boolean>;
     const isRunning = () =>
       (cold("1s a", { a: dockerInfo.isRunning }) as unknown) as Observable<
         boolean
@@ -45,6 +56,7 @@ const assertNextStep = (expectedPath: Path, dockerInfo: CreateFlowState) => {
       (cold("1s a", { a: dockerInfo.dockerSettings }) as unknown) as Observable<
         DockerSettings
       >;
+    const isLinux = () => dockerInfo.isLinux;
     expectObservable(
       getNextRoute(
         minimumRuntime,
@@ -53,7 +65,10 @@ const assertNextStep = (expectedPath: Path, dockerInfo: CreateFlowState) => {
         isDownloaded,
         rebootRequired,
         isWSL2,
-        dockerSettings
+        dockerSettings,
+        isDockerComposeInstalled,
+        isLinux,
+        isPermissionDenied
       )
     ).toBe(expected, {
       a: expectedPath,
@@ -76,10 +91,13 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: false,
       isInstalled: false,
+      isLinux: false,
+      isDockerComposeInstalled: false,
       isRunning: false,
       rebootRequired: false,
       isWSL2: false,
       dockerSettings: {},
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });
@@ -89,10 +107,45 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: true,
       isInstalled: false,
+      isLinux: false,
+      isDockerComposeInstalled: false,
       isRunning: false,
       rebootRequired: false,
       isWSL2: false,
       dockerSettings: {},
+      isPermissionDenied: false,
+    };
+    assertNextStep(expectedPath, dockerInfo);
+  });
+
+  it("directs to permission denied", () => {
+    const expectedPath = Path.DOCKER_PERMISSION_DENIED;
+    const dockerInfo = {
+      isDownloaded: false,
+      isInstalled: false,
+      isLinux: true,
+      isDockerComposeInstalled: false,
+      isRunning: false,
+      rebootRequired: false,
+      isWSL2: false,
+      dockerSettings: {},
+      isPermissionDenied: true,
+    };
+    assertNextStep(expectedPath, dockerInfo);
+  });
+
+  it("directs to install docker-compose on linux", () => {
+    const expectedPath = Path.INSTALL_DOCKER_COMPOSE;
+    const dockerInfo = {
+      isDownloaded: true,
+      isInstalled: true,
+      isLinux: true,
+      isDockerComposeInstalled: false,
+      isRunning: false,
+      rebootRequired: false,
+      isWSL2: false,
+      dockerSettings: {},
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });
@@ -102,10 +155,13 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: false,
       isInstalled: false,
+      isLinux: false,
+      isDockerComposeInstalled: false,
       isRunning: false,
       rebootRequired: true,
       isWSL2: false,
       dockerSettings: {},
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });
@@ -115,12 +171,15 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: false,
       isInstalled: false,
+      isLinux: false,
+      isDockerComposeInstalled: false,
       isRunning: false,
       rebootRequired: false,
       isWSL2: false,
       dockerSettings: {
         wslEngineEnabled: true,
       },
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });
@@ -130,10 +189,13 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: false,
       isInstalled: true,
+      isLinux: false,
+      isDockerComposeInstalled: true,
       isRunning: true,
       rebootRequired: false,
       isWSL2: false,
       dockerSettings: {},
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });
@@ -143,10 +205,13 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: false,
       isInstalled: true,
+      isLinux: false,
+      isDockerComposeInstalled: true,
       isRunning: false,
       rebootRequired: false,
       isWSL2: false,
       dockerSettings: {},
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });
@@ -156,12 +221,15 @@ describe("nextStep$", () => {
     const dockerInfo = {
       isDownloaded: false,
       isInstalled: false,
+      isLinux: false,
+      isDockerComposeInstalled: false,
       isRunning: false,
       rebootRequired: false,
       isWSL2: false,
       dockerSettings: {
         wslEngineEnabled: false,
       },
+      isPermissionDenied: false,
     };
     assertNextStep(expectedPath, dockerInfo);
   });

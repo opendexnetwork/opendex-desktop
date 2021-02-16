@@ -15,7 +15,7 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 import { timer } from "rxjs";
 import { delay, mergeMap, retryWhen } from "rxjs/operators";
 import api from "../api";
-import { isWindows } from "../common/appUtil";
+import { isDarwin } from "../common/appUtil";
 import { Path } from "../router/Path";
 import { DOCKER_STORE } from "../stores/dockerStore";
 import { SETTINGS_STORE } from "../stores/settingsStore";
@@ -60,6 +60,14 @@ const DockerNotDetected = inject(
       return () => subscription.unsubscribe();
     }, [history, connectionFailed, settingsStore, dockerStore]);
 
+    const titleText = () => {
+      if (isDarwin()) {
+        return connectionFailed
+          ? "Unable to connect to OpenDEX Docker"
+          : "Waiting for OpenDEX Docker";
+      }
+      return "Connection to OpenDEX Docker lost";
+    };
     return (
       <RowsContainer>
         <Grid container item direction="column">
@@ -77,15 +85,11 @@ const DockerNotDetected = inject(
             </Grid>
             <Grid item>
               <Typography variant="h4" component="h1" align="center">
-                {isWindows()
-                  ? "Connection to OpenDEX Docker lost"
-                  : connectionFailed
-                  ? "Unable to connect to OpenDEX Docker"
-                  : "Waiting for OpenDEX Docker"}
+                {titleText()}
               </Typography>
             </Grid>
           </Grid>
-          {isWindows() && (
+          {!isDarwin() && (
             <Grid item container alignItems="center" justify="center">
               <Typography variant="body1" align="center">
                 Trying to reconnect. Please check your environment.
@@ -105,18 +109,18 @@ const DockerNotDetected = inject(
           <Grid container item alignItems="center" justify="center">
             <Button
               component={RouterLink}
-              to={isWindows() ? Path.HOME : Path.CONNECT_TO_REMOTE}
+              to={isDarwin() ? Path.CONNECT_TO_REMOTE : Path.HOME}
               variant="outlined"
               endIcon={<ArrowForwardIcon />}
             >
-              {isWindows()
-                ? "Go To Start Page"
-                : "Connect remote OpenDEX Docker"}
+              {isDarwin()
+                ? "Connect remote OpenDEX Docker"
+                : "Go To Start Page"}
             </Button>
           </Grid>
         </Grid>
         <Grid container item alignItems="center">
-          {!isWindows() && <LinkToSetupGuide />}
+          {isDarwin() && <LinkToSetupGuide />}
         </Grid>
       </RowsContainer>
     );
