@@ -47,7 +47,7 @@ const AVAILABLE_COMMANDS = {
 const isDockerInstalled$ = (): Observable<boolean> => {
   return execCommand$(AVAILABLE_COMMANDS.IS_INSTALLED).pipe(
     map((output) => {
-      if (output.includes("Docker Engine")) {
+      if (output.includes("Engine")) {
         return true;
       }
       return false;
