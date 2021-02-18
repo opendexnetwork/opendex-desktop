@@ -28,11 +28,10 @@ contextBridge.exposeInMainWorld("electron", {
     log.info(message);
   },
   opendexDockerEnvExists: (network) => {
-    let pathFromHomedir = "";
-    // TODO: implement for macos and linux
-    if (process.platform === "win32") {
-      pathFromHomedir = "AppData/Local/OpendexDocker";
-    }
+    const pathFromHomedir =
+      process.platform === "win32"
+        ? "AppData/Local/OpendexDocker"
+        : ".opendex-docker";
     return fs.existsSync(
       path.join(
         os.homedir(),

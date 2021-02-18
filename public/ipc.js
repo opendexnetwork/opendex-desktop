@@ -18,14 +18,51 @@ const DOCKER_SETTINGS_PATH = path.join(
   os.homedir(),
   "AppData/Roaming/Docker/settings.json"
 );
-const LAUNCHER_LOCATION = isDev
-  ? "./assets/opendex-launcher.exe"
-  : "../../opendex-launcher.exe";
-const LAUNCHER = path.join(__dirname, LAUNCHER_LOCATION);
+const getLauncherPath = () => {
+  const fileName =
+    os.platform() === "win32" ? "opendex-launcher.exe" : "opendex-launcher";
+  const LAUNCHER_LOCATION = isDev
+    ? `./assets/${fileName}`
+    : `../../${fileName}`;
+  return path.join(__dirname, LAUNCHER_LOCATION);
+};
+
+const LAUNCHER = getLauncherPath();
+const BRANCH = "21.02.11-rc.2";
+// TODO: remove testnet
+const NETWORK = "testnet";
+// windows launcher
+const WINDOWS_LAUNCHER_COMMAND = `set BRANCH=${BRANCH}&set NETWORK=${NETWORK}&${LAUNCHER}`;
+const WINDOWS_LAUNCHER_START = `${WINDOWS_LAUNCHER_COMMAND} setup`;
+const WINDOWS_LAUNCHER_STOP = `${WINDOWS_LAUNCHER_COMMAND} stop`;
+// linux launcher
+const LINUX_LAUNCHER_COMMAND = `BRANCH=${BRANCH} NETWORK=${NETWORK} ${LAUNCHER}`;
+const LINUX_LAUNCHER_START = `${LINUX_LAUNCHER_COMMAND} setup`;
+const LINUX_LAUNCHER_STOP = `${LINUX_LAUNCHER_COMMAND} stop`;
+
+const getSetupOpendexDocker = () => {
+  if (os.platform() === "win32") {
+    // windows
+    return WINDOWS_LAUNCHER_START;
+  } else {
+    // linux and mac
+    return LINUX_LAUNCHER_START;
+  }
+};
+
+const getStopOpendexDocker = () => {
+  if (os.platform() === "win32") {
+    return WINDOWS_LAUNCHER_STOP;
+  } else {
+    // linux and mac
+    return LINUX_LAUNCHER_STOP;
+  }
+};
 
 // List of commands we're allowing the client to execute.
 const AVAILABLE_COMMANDS = {
   docker_version: "docker version",
+  docker_compose_version: "docker-compose version",
   docker_ps: "docker ps",
   docker_download: `curl ${DOCKER_BINARY_DOWNLOAD_URL} > ${DOCKER_INSTALLER_FILE_NAME}`,
   docker_download_status: `dir | findstr /R "${DOCKER_INSTALLER_FILE_NAME}"`,
@@ -36,10 +73,8 @@ const AVAILABLE_COMMANDS = {
   modify_docker_settings: "settings modify",
   wsl_version: "wsl --set-default-version 2",
   start_docker: `"${WINDOWS_DOCKER_EXECUTABLE_PATH}"`,
-  // TODO: windows specific environment variables (will not work for Mac and Linux)
-  // TODO: remove testnet
-  setup_opendex_docker: `set BRANCH=21.02.11-rc.2&set NETWORK=testnet&${LAUNCHER} setup`,
-  stop_opendex_docker: `set BRANCH=21.02.11-rc.2&set NETWORK=testnet&${LAUNCHER} down`,
+  setup_opendex_docker: getSetupOpendexDocker(),
+  stop_opendex_docker: getStopOpendexDocker(),
 };
 
 const environmentStartedSub = new BehaviorSubject(false);

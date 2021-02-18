@@ -11,8 +11,11 @@ import {
   isDockerRunning$,
   isWSL2$,
   rebootRequired$,
+  isDockerComposeInstalled$,
+  isPermissionDenied$,
 } from "../../common/dockerUtil";
 import { getNextRoute } from "./next-route";
+import { isLinux } from "../../common/appUtil";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -66,7 +69,10 @@ const Create = (): ReactElement => {
       isDockerDownloaded$,
       rebootRequired$,
       isWSL2$,
-      dockerSettings$
+      dockerSettings$,
+      isDockerComposeInstalled$,
+      isLinux,
+      isPermissionDenied$
     )
       .pipe(take(1))
       .subscribe((nextRoute) => history.push(nextRoute));

@@ -1,5 +1,5 @@
 import { History } from "history";
-import { isWindows, logError } from "../common/appUtil";
+import { isDarwin, logError } from "../common/appUtil";
 import { Path } from "../router/Path";
 import { SettingsStore } from "../stores/settingsStore";
 
@@ -11,7 +11,7 @@ export const handleEvent = (
   const data: string = event.data;
 
   if (data.startsWith("disconnect")) {
-    const nextPath = isWindows() ? Path.HOME : Path.CONNECT_TO_REMOTE;
+    const nextPath = isDarwin() ? Path.CONNECT_TO_REMOTE : Path.HOME;
     history.push(nextPath);
     return;
   }

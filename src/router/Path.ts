@@ -10,4 +10,6 @@ export enum Path {
   STARTING_OPENDEX = "/starting_opendex",
   WAITING_DOCKER_START = "/waiting_docker_start",
   INCOMPATIBLE_WSL_SETTINGS = "/incompatible_wsl_settings",
+  INSTALL_DOCKER_COMPOSE = "/install-docker-compose",
+  DOCKER_PERMISSION_DENIED = "/docker-permission-denied",
 }

@@ -54,8 +54,7 @@ function createWindow() {
 }
 
 const handleMoveToTrayNotification = () => {
-  // TODO: prevent message only on 'darwin' when launcher is enabled on all operating systems
-  if (process.platform !== "win32" || !environmentStarted) {
+  if (process.platform === "darwin" || !environmentStarted) {
     return;
   }
   const notification = {
@@ -67,7 +66,7 @@ const handleMoveToTrayNotification = () => {
 
 const handleShutdownNotification = () => {
   // TODO: remove platform check when launcher is enabled on all operating systems
-  if (process.platform !== "win32" || !environmentStarted) {
+  if (process.platform === "darwin" || !environmentStarted) {
     return;
   }
   const notification = {
@@ -174,7 +173,10 @@ app.on("will-quit", (e) => {
     readyToQuit = true;
     app.quit();
   };
-  if (process.platform === "win32" && !readyToQuit) {
+  if (
+    (process.platform === "win32" || process.platform === "linux") &&
+    !readyToQuit
+  ) {
     e.preventDefault();
     execCommand(AVAILABLE_COMMANDS.stop_opendex_docker)
       .pipe(take(1))

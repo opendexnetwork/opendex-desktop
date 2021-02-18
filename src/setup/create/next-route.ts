@@ -11,7 +11,10 @@ const getNextRoute = (
   isDownloaded: () => Observable<boolean>,
   rebootRequired: () => Observable<boolean>,
   isWSL2: () => Observable<boolean>,
-  dockerSettings: () => Observable<DockerSettings>
+  dockerSettings: () => Observable<DockerSettings>,
+  isDockerComposeInstalled: () => Observable<boolean>,
+  isLinux: () => boolean,
+  isPermissionDenied: () => Observable<boolean>
 ): Observable<Path> => {
   return combineLatest([
     minimumRuntime(),
@@ -21,6 +24,8 @@ const getNextRoute = (
     rebootRequired(),
     isWSL2(),
     dockerSettings(),
+    isDockerComposeInstalled(),
+    isPermissionDenied(),
   ]).pipe(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     map(
@@ -32,6 +37,8 @@ const getNextRoute = (
         rebootRequired,
         isWSL2,
         dockerSettings,
+        dockerComposeInstalled,
+        isPermissionDenied,
       ]) => {
         logInfo("isInstalled", isInstalled);
         logInfo("isRunning", isRunning);
@@ -42,6 +49,17 @@ const getNextRoute = (
         logInfo("wslEngineEnabled", wslEngineEnabled);
         const dockerSettingsExist = wslEngineEnabled !== undefined;
         logInfo("dockerSettingsExist", dockerSettingsExist);
+        logInfo("dockerComposeInstalled", dockerComposeInstalled);
+        logInfo("isPermissionDenied", isPermissionDenied);
+        if (isLinux() && isPermissionDenied) {
+          return Path.DOCKER_PERMISSION_DENIED;
+        }
+        if (isLinux() && !isInstalled) {
+          return Path.DOWNLOAD_DOCKER;
+        }
+        if (isLinux() && !dockerComposeInstalled) {
+          return Path.INSTALL_DOCKER_COMPOSE;
+        }
         if (rebootRequired) {
           return Path.RESTART_REQUIRED;
         }
