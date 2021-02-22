@@ -28,10 +28,17 @@ contextBridge.exposeInMainWorld("electron", {
     log.info(message);
   },
   opendexDockerEnvExists: (network) => {
-    const pathFromHomedir =
-      process.platform === "win32"
-        ? "AppData/Local/OpendexDocker"
-        : ".opendex-docker";
+    const getPathFromHomeDir = (platform) => {
+      switch (platform) {
+        case "win32":
+          return "AppData/Local/OpendexDocker";
+        case "darwin":
+          return "Library/Application Support/OpendexDocker";
+        default:
+          return ".opendex-docker";
+      }
+    };
+    const pathFromHomedir = getPathFromHomeDir(process.platform);
     return fs.existsSync(
       path.join(
         os.homedir(),

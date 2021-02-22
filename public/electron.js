@@ -135,7 +135,7 @@ const trayMenuWithHide = () => {
 app
   .whenReady()
   .then(() => {
-    tray = new Tray(path.join(__dirname, "./assets/512x512.png"));
+    tray = new Tray(path.join(__dirname, "./assets/16x16.png"));
     tray.setContextMenu(trayMenuWithHide());
     tray.on("double-click", () => {
       if (mainWindow.isVisible()) {
@@ -173,10 +173,7 @@ app.on("will-quit", (e) => {
     readyToQuit = true;
     app.quit();
   };
-  if (
-    (process.platform === "win32" || process.platform === "linux") &&
-    !readyToQuit
-  ) {
+  if (!readyToQuit) {
     e.preventDefault();
     execCommand(AVAILABLE_COMMANDS.stop_opendex_docker)
       .pipe(take(1))

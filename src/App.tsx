@@ -4,7 +4,6 @@ import { ThemeProvider } from "@material-ui/styles";
 import { Provider } from "mobx-react";
 import React, { ReactElement } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { isDarwin } from "./common/appUtil";
 import { OPENDEX_DOCKER_LOCAL_TESTNET_URL } from "./constants";
 import Dashboard from "./dashboard/Dashboard";
 import { Path } from "./router/Path";
@@ -117,7 +116,7 @@ function App(): ReactElement {
               <DockerNotDetected />
             </Route>
             <Route path={Path.HOME}>
-              {isDarwin() ? <DockerNotDetected /> : <Landing />}
+              <Landing />
             </Route>
           </Switch>
         </Router>
