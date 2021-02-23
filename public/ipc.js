@@ -34,11 +34,11 @@ const NETWORK = "testnet";
 // windows launcher
 const WINDOWS_LAUNCHER_COMMAND = `set BRANCH=${BRANCH}&set NETWORK=${NETWORK}&${LAUNCHER}`;
 const WINDOWS_LAUNCHER_START = `${WINDOWS_LAUNCHER_COMMAND} setup`;
-const WINDOWS_LAUNCHER_STOP = `${WINDOWS_LAUNCHER_COMMAND} stop`;
+const WINDOWS_LAUNCHER_STOP = `${WINDOWS_LAUNCHER_COMMAND} down`;
 // linux launcher
 const LINUX_LAUNCHER_COMMAND = `BRANCH=${BRANCH} NETWORK=${NETWORK} ${LAUNCHER}`;
 const LINUX_LAUNCHER_START = `${LINUX_LAUNCHER_COMMAND} setup`;
-const LINUX_LAUNCHER_STOP = `${LINUX_LAUNCHER_COMMAND} stop`;
+const LINUX_LAUNCHER_STOP = `${LINUX_LAUNCHER_COMMAND} down`;
 
 const getSetupOpendexDocker = () => {
   if (os.platform() === "win32") {
