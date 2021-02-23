@@ -28,7 +28,7 @@ const getLauncherPath = () => {
 };
 
 const LAUNCHER = getLauncherPath();
-const BRANCH = "21.02.11-rc.2";
+const BRANCH = "21.02.23-rc.2";
 // TODO: remove testnet
 const NETWORK = "testnet";
 // windows launcher
