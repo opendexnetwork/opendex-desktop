@@ -19,12 +19,33 @@ const DOCKER_SETTINGS_PATH = path.join(
   "AppData/Roaming/Docker/settings.json"
 );
 const getLauncherPath = () => {
-  const fileName =
-    os.platform() === "win32" ? "opendex-launcher.exe" : "opendex-launcher";
+  let fileName = "";
+  console.log("platform is", os.platform(), os.platform() === "darwin");
+  switch (os.platform()) {
+    case "win32":
+      fileName = "opendex-launcher.exe";
+      break;
+    case "darwin":
+      fileName = "opendex-launcher-darwin";
+      break;
+    default:
+      fileName = "opendex-launcher";
+  }
+
   const LAUNCHER_LOCATION = isDev
     ? `./assets/${fileName}`
     : `../../${fileName}`;
   return path.join(__dirname, LAUNCHER_LOCATION);
+};
+
+const getCommandWithPath = (cmd) => {
+  if (os.platform() === "darwin") {
+    // extend the packaged mac app PATH to execute docker commands
+    return `PATH=$PATH:/usr/local/bin ${cmd}`;
+  } else {
+    // linux and windows don't need any path adjustments
+    return cmd;
+  }
 };
 
 const LAUNCHER = getLauncherPath();
@@ -35,10 +56,12 @@ const NETWORK = "testnet";
 const WINDOWS_LAUNCHER_COMMAND = `set BRANCH=${BRANCH}&set NETWORK=${NETWORK}&${LAUNCHER}`;
 const WINDOWS_LAUNCHER_START = `${WINDOWS_LAUNCHER_COMMAND} setup`;
 const WINDOWS_LAUNCHER_STOP = `${WINDOWS_LAUNCHER_COMMAND} down`;
-// linux launcher
-const LINUX_LAUNCHER_COMMAND = `BRANCH=${BRANCH} NETWORK=${NETWORK} ${LAUNCHER}`;
-const LINUX_LAUNCHER_START = `${LINUX_LAUNCHER_COMMAND} setup`;
-const LINUX_LAUNCHER_STOP = `${LINUX_LAUNCHER_COMMAND} down`;
+// linux, darwin launcher
+const DEFAULT_LAUNCHER_COMMAND = getCommandWithPath(
+  `BRANCH=${BRANCH} NETWORK=${NETWORK} '${LAUNCHER}'`
+);
+const DEFAULT_LAUNCHER_START = `${DEFAULT_LAUNCHER_COMMAND} setup`;
+const DEFAULT_LAUNCHER_STOP = `${DEFAULT_LAUNCHER_COMMAND} down`;
 
 const getSetupOpendexDocker = () => {
   if (os.platform() === "win32") {
@@ -46,7 +69,7 @@ const getSetupOpendexDocker = () => {
     return WINDOWS_LAUNCHER_START;
   } else {
     // linux and mac
-    return LINUX_LAUNCHER_START;
+    return DEFAULT_LAUNCHER_START;
   }
 };
 
@@ -55,15 +78,15 @@ const getStopOpendexDocker = () => {
     return WINDOWS_LAUNCHER_STOP;
   } else {
     // linux and mac
-    return LINUX_LAUNCHER_STOP;
+    return DEFAULT_LAUNCHER_STOP;
   }
 };
 
 // List of commands we're allowing the client to execute.
 const AVAILABLE_COMMANDS = {
-  docker_version: "docker version",
-  docker_compose_version: "docker-compose version",
-  docker_ps: "docker ps",
+  docker_version: getCommandWithPath("docker version"),
+  docker_compose_version: getCommandWithPath("docker-compose version"),
+  docker_ps: getCommandWithPath("docker ps"),
   docker_download: `curl ${DOCKER_BINARY_DOWNLOAD_URL} > ${DOCKER_INSTALLER_FILE_NAME}`,
   docker_download_status: `dir | findstr /R "${DOCKER_INSTALLER_FILE_NAME}"`,
   docker_install: `${DOCKER_INSTALLER_FILE_NAME} install --quiet`,

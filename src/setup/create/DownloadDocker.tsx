@@ -10,7 +10,7 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { interval, Subscription } from "rxjs";
 import { filter, mergeMap } from "rxjs/operators";
-import { isLinux, isWindows } from "../../common/appUtil";
+import { isWindows } from "../../common/appUtil";
 import {
   downloadDocker$,
   isDockerInstalled$,
@@ -74,7 +74,7 @@ const DownloadDocker = (): ReactElement => {
       <Grid item container justify="center">
         <Typography variant="h6" component="h2" align="center">
           Docker not detected. In order to create a new OpenDEX environment, you
-          need to get Docker.
+          need to get install and start Docker.
         </Typography>
       </Grid>
       <Grid
@@ -110,7 +110,7 @@ const DownloadDocker = (): ReactElement => {
                   Download Now
                 </Button>
               )}
-              {isLinux() && (
+              {!isWindows() && (
                 <a
                   href="https://docs.docker.com/engine/install/"
                   rel="noopener noreferrer"

@@ -15,12 +15,10 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 import { timer } from "rxjs";
 import { delay, mergeMap, retryWhen } from "rxjs/operators";
 import api from "../api";
-import { isDarwin } from "../common/appUtil";
 import { Path } from "../router/Path";
 import { DOCKER_STORE } from "../stores/dockerStore";
 import { SETTINGS_STORE } from "../stores/settingsStore";
 import { WithStores } from "../stores/WithStores";
-import LinkToSetupGuide from "./LinkToSetupGuide";
 import RowsContainer from "./RowsContainer";
 
 type DockerNotDetectedProps = WithStores;
@@ -60,14 +58,6 @@ const DockerNotDetected = inject(
       return () => subscription.unsubscribe();
     }, [history, connectionFailed, settingsStore, dockerStore]);
 
-    const titleText = () => {
-      if (isDarwin()) {
-        return connectionFailed
-          ? "Unable to connect to OpenDEX Docker"
-          : "Waiting for OpenDEX Docker";
-      }
-      return "Connection to OpenDEX Docker lost";
-    };
     return (
       <RowsContainer>
         <Grid container item direction="column">
@@ -85,17 +75,15 @@ const DockerNotDetected = inject(
             </Grid>
             <Grid item>
               <Typography variant="h4" component="h1" align="center">
-                {titleText()}
+                Connection to OpenDEX Docker lost
               </Typography>
             </Grid>
           </Grid>
-          {!isDarwin() && (
-            <Grid item container alignItems="center" justify="center">
-              <Typography variant="body1" align="center">
-                Trying to reconnect. Please check your environment.
-              </Typography>
-            </Grid>
-          )}
+          <Grid item container alignItems="center" justify="center">
+            <Typography variant="body1" align="center">
+              Trying to reconnect. Please check your environment.
+            </Typography>
+          </Grid>
           {!connectionFailed && (
             <Grid
               container
@@ -109,18 +97,13 @@ const DockerNotDetected = inject(
           <Grid container item alignItems="center" justify="center">
             <Button
               component={RouterLink}
-              to={isDarwin() ? Path.CONNECT_TO_REMOTE : Path.HOME}
+              to={Path.HOME}
               variant="outlined"
               endIcon={<ArrowForwardIcon />}
             >
-              {isDarwin()
-                ? "Connect remote OpenDEX Docker"
-                : "Go To Start Page"}
+              Go To Start Page
             </Button>
           </Grid>
-        </Grid>
-        <Grid container item alignItems="center">
-          {isDarwin() && <LinkToSetupGuide />}
         </Grid>
       </RowsContainer>
     );

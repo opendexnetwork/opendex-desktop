@@ -17,7 +17,13 @@
     },
     "mac": {
       "category": "public.app-category.finance",
-      "icon": "public/assets/512x512.png"
+      "icon": "public/assets/512x512.png",
+      "extraResources": [
+        {
+          "from": "public/assets/opendex-launcher-darwin",
+          "to": "./opendex-launcher-darwin"
+        }
+      ]
     },
     "win": {
       "icon": "public/assets/512x512.png",
@@ -61,9 +67,9 @@
     "build-all": "yarn lint && yarn react-build && yarn electron-build --publish never -mwl",
     "build-wl": "yarn lint && yarn react-build && yarn electron-build --publish never --win --linux",
     "start": "concurrently --kill-others \"cross-env BROWSER=none yarn react-start\" \"wait-on https://localhost:3000 && electron .\"",
-    "test": "prettier --check src/ && yarn react-test",
+    "test": "prettier --check src/ public/ && yarn react-test",
     "lint": "eslint . --ext .js,.ts,.tsx",
-    "prettier": "prettier --write src/"
+    "prettier": "prettier --write src/ public/"
   },
   "eslintConfig": {
     "extends": "react-app"
