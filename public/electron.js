@@ -65,8 +65,7 @@ const handleMoveToTrayNotification = () => {
 };
 
 const handleShutdownNotification = () => {
-  // TODO: remove platform check when launcher is enabled on all operating systems
-  if (process.platform === "darwin" || !environmentStarted) {
+  if (!environmentStarted) {
     return;
   }
   const notification = {
@@ -169,6 +168,9 @@ if (!gotTheLock) {
 app.on("ready", createWindow);
 
 app.on("will-quit", (e) => {
+  if (!environmentStarted) {
+    return;
+  }
   const quitApp = () => {
     readyToQuit = true;
     app.quit();
