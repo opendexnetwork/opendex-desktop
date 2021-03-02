@@ -1,5 +1,6 @@
 import { from, Observable } from "rxjs";
 import { catchError, mergeMap } from "rxjs/operators";
+import { GithubRelease } from "./models/GithubRelease";
 import { Status } from "./models/Status";
 
 const path = "api/v1";
@@ -29,5 +30,11 @@ export default {
 
   statusByService$(serviceName: string, url: string): Observable<Status> {
     return fetchJsonResponse(`${url}/${path}/status/${serviceName}`);
+  },
+
+  latestRelease$(): Observable<GithubRelease> {
+    const url =
+      "https://api.github.com/repos/opendexnetwork/opendex-desktop/releases/latest";
+    return fetchJsonResponse(url);
   },
 };

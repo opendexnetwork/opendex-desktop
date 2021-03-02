@@ -20,7 +20,6 @@ const DOCKER_SETTINGS_PATH = path.join(
 );
 const getLauncherPath = () => {
   let fileName = "";
-  console.log("platform is", os.platform(), os.platform() === "darwin");
   switch (os.platform()) {
     case "win32":
       fileName = "opendex-launcher.exe";

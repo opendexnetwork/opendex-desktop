@@ -49,4 +49,7 @@ contextBridge.exposeInMainWorld("electron", {
   dialog: () => {
     return remote.dialog;
   },
+  appVersion: () => {
+    return remote.app.getVersion();
+  },
 });
