@@ -37,7 +37,7 @@
   },
   "main": "public/electron.js",
   "homepage": "./",
-  "version": "1.0.0-testnet.10",
+  "version": "1.0.0-testnet.11",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
