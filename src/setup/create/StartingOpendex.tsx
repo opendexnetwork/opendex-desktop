@@ -93,9 +93,6 @@ const StartingOpendex = inject(SETTINGS_STORE)(
             direction="column"
           >
             <OpendexLogo />
-            <Typography variant="h6" component="h2" align="center">
-              Powering OpenDEX
-            </Typography>
           </Grid>
           <Grid>
             <LinearProgress variant="determinate" value={progress} />
