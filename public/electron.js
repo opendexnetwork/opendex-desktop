@@ -51,7 +51,20 @@ function createWindow() {
   });
   mainWindow.on("minimize", () => tray.setContextMenu(trayMenuWithShow()));
   mainWindow.on("show", () => tray.setContextMenu(trayMenuWithHide()));
+  mainWindow.webContents.on("context-menu", handlePopupMenu);
 }
+
+const selectionMenu = Menu.buildFromTemplate([{ role: "copy" }]);
+const editMenu = Menu.buildFromTemplate([{ role: "paste" }]);
+
+const handlePopupMenu = (_e, props) => {
+  const { selectionText, isEditable } = props;
+  if (selectionText) {
+    selectionMenu.popup(mainWindow);
+  } else if (isEditable) {
+    editMenu.popup(mainWindow);
+  }
+};
 
 const handleMoveToTrayNotification = () => {
   if (process.platform === "darwin" || !environmentStarted) {
@@ -134,6 +147,7 @@ const trayMenuWithHide = () => {
 app
   .whenReady()
   .then(() => {
+    electron.nativeTheme.themeSource = "dark";
     tray = new Tray(path.join(__dirname, "./assets/16x16.png"));
     tray.setContextMenu(trayMenuWithHide());
     tray.on("double-click", () => {
