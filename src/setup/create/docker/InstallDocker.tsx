@@ -4,12 +4,15 @@ import GetAppOutlinedIcon from "@material-ui/icons/GetAppOutlined";
 import React, { ReactElement, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { filter, mergeMap, shareReplay } from "rxjs/operators";
-import { installDocker$, modifyDockerSettings$ } from "../../common/dockerUtil";
-import { Path } from "../../router/Path";
-import { DockerInstallPromptScreenshot } from "../DockerInstallPromptScreenshot";
-import LinkToDiscord from "../LinkToDiscord";
-import RowsContainer from "../RowsContainer";
-import InfoBar from "./InfoBar";
+import {
+  installDocker$,
+  modifyDockerSettings$,
+} from "../../../common/utils/dockerUtil";
+import { Path } from "../../../router/Path";
+import { DockerInstallPromptScreenshot } from "./DockerInstallPromptScreenshot";
+import LinkToDiscord from "../../LinkToDiscord";
+import RowsContainer from "../../../common/components/RowsContainer";
+import InfoBar from "../../../common/components/InfoBar";
 
 const InstallDocker = (): ReactElement => {
   const history = useHistory();

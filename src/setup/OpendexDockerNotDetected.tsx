@@ -19,9 +19,9 @@ import { Path } from "../router/Path";
 import { DOCKER_STORE } from "../stores/dockerStore";
 import { SETTINGS_STORE } from "../stores/settingsStore";
 import { WithStores } from "../stores/WithStores";
-import RowsContainer from "./RowsContainer";
+import RowsContainer from "../common/components/RowsContainer";
 
-type DockerNotDetectedProps = WithStores;
+type OpendexDockerNotDetectedProps = WithStores;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,11 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const DockerNotDetected = inject(
+const OpendexDockerNotDetected = inject(
   SETTINGS_STORE,
   DOCKER_STORE
 )(
-  observer(({ settingsStore, dockerStore }: DockerNotDetectedProps) => {
+  observer(({ settingsStore, dockerStore }: OpendexDockerNotDetectedProps) => {
     const history = useHistory();
     const classes = useStyles();
     const [connectionFailed, setConnectionFailed] = useState(false);
@@ -110,4 +110,4 @@ const DockerNotDetected = inject(
   })
 );
 
-export default DockerNotDetected;
+export default OpendexDockerNotDetected;

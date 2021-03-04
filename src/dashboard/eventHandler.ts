@@ -1,5 +1,5 @@
 import { History } from "history";
-import { isDarwin, logError } from "../common/appUtil";
+import { isDarwin, logError } from "../common/utils/appUtil";
 import { Path } from "../router/Path";
 import { SettingsStore } from "../stores/settingsStore";
 

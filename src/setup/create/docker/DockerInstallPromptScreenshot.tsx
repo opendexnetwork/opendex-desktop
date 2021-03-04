@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import InstallDockerPromptImg from "../assets/install-docker-prompt.png";
+import InstallDockerPromptImg from "../../../assets/install-docker-prompt.png";
 
 const useStyles = makeStyles(() =>
   createStyles({

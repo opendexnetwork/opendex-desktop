@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import InstallWslImg from "../assets/install-wsl2-prompt.png";
+import InstallWslImg from "../../../assets/install-wsl2-prompt.png";
 
 const useStyles = makeStyles(() =>
   createStyles({

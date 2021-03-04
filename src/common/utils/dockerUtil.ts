@@ -1,7 +1,7 @@
 import { Observable, of } from "rxjs";
 import { catchError, map, mapTo, take } from "rxjs/operators";
 import { v4 as uuidv4 } from "uuid";
-import { Network } from "../enums";
+import { Network } from "../../enums";
 import { logError, logInfo, isWindows } from "./appUtil";
 
 const execCommand$ = (command: string): Observable<string> => {

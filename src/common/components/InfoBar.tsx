@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { ElementType, ReactElement } from "react";
-import { SIDE_PADDING, SIDE_PADDING_UNIT } from "../RowsContainer";
+import { SIDE_PADDING, SIDE_PADDING_UNIT } from "./RowsContainer";
 
 type InfoBarProps = {
   text: string;

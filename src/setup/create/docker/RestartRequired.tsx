@@ -4,16 +4,16 @@ import CheckIcon from "@material-ui/icons/Check";
 import React, { ReactElement, useEffect } from "react";
 import { combineLatest, of } from "rxjs";
 import { mergeMap } from "rxjs/operators";
-import { logInfo } from "../../common/appUtil";
+import { logInfo } from "../../../common/utils/appUtil";
 import {
   DockerSettings,
   dockerSettings$,
   isWSL2$,
   restart$,
-} from "../../common/dockerUtil";
-import LinkToDiscord from "../LinkToDiscord";
-import RowsContainer from "../RowsContainer";
-import InfoBar from "./InfoBar";
+} from "../../../common/utils/dockerUtil";
+import LinkToDiscord from "../../LinkToDiscord";
+import RowsContainer from "../../../common/components/RowsContainer";
+import InfoBar from "../../../common/components/InfoBar";
 
 const RestartRequired = (): ReactElement => {
   useEffect(() => {

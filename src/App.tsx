@@ -14,20 +14,20 @@ import Dashboard from "./dashboard/Dashboard";
 import { Path } from "./router/Path";
 import ConnectToRemote from "./setup/ConnectToRemote";
 import Create from "./setup/create/Create";
-import DownloadDocker from "./setup/create/DownloadDocker";
-import IncorrectWslSettings from "./setup/create/IncorrectWslSettings";
-import InstallDocker from "./setup/create/InstallDocker";
-import RestartRequired from "./setup/create/RestartRequired";
+import DownloadDocker from "./setup/create/docker/DownloadDocker";
+import IncorrectWslSettings from "./setup/create/docker/IncorrectWslSettings";
+import InstallDocker from "./setup/create/docker/InstallDocker";
+import RestartRequired from "./setup/create/docker/RestartRequired";
 import StartingOpendex from "./setup/create/StartingOpendex";
-import DockerNotDetected from "./setup/DockerNotDetected";
+import OpendexDockerNotDetected from "./setup/OpendexDockerNotDetected";
 import Landing from "./setup/Landing";
-import WaitingDockerStart from "./setup/WaitingDockerStart";
+import WaitingDockerStart from "./setup/create/docker/WaitingDockerStart";
 import { useDockerStore } from "./stores/dockerStore";
 import { useSettingsStore } from "./stores/settingsStore";
-import InstallDockerCompose from "./setup/create/InstallDockerCompose";
-import DockerPermissionDenied from "./setup/create/DockerPermissionDenied";
+import DockerPermissionDenied from "./setup/create/docker/DockerPermissionDenied";
+import InstallDockerCompose from "./setup/create/docker/InstallDockerCompose";
 import { Grid } from "@material-ui/core";
-import UpdateMessage from "./dashboard/UpdateMessage";
+import UpdateMessage from "./common/components/UpdateMessage";
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -134,7 +134,7 @@ function App(): ReactElement {
                 <IncorrectWslSettings />
               </Route>
               <Route path={Path.CONNECTION_LOST}>
-                <DockerNotDetected />
+                <OpendexDockerNotDetected />
               </Route>
               <Route path={Path.HOME}>
                 <Landing />
