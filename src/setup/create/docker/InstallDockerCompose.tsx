@@ -1,20 +1,14 @@
-import {
-  Button,
-  createStyles,
-  Grid,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { createStyles, Grid, makeStyles, Typography } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import React, { ReactElement, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { interval } from "rxjs";
 import { filter, mergeMap } from "rxjs/operators";
-import { isLinux } from "../../../common/utils/appUtil";
 import { isDockerComposeInstalled$ } from "../../../common/utils/dockerUtil";
 import { Path } from "../../../router/Path";
 import LinkToDiscord from "../../LinkToDiscord";
 import RowsContainer from "../../../common/components/RowsContainer";
+import Button from "../../../common/components/input/button/Button";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -61,29 +55,22 @@ const InstallDockerCompose = (): ReactElement => {
         <Grid item container justify="space-between">
           <>
             <Button
+              text="Cancel"
               variant="outlined"
-              disableElevation
               onClick={() => history.push(Path.HOME)}
+            />
+            <a
+              href="https://docs.docker.com/compose/install/"
+              className={classes.installLink}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Cancel
-            </Button>
-            {isLinux() && (
-              <a
-                href="https://docs.docker.com/compose/install/"
-                className={classes.installLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disableElevation
-                  endIcon={<ArrowForwardIcon />}
-                >
-                  Install Docker Compose
-                </Button>
-              </a>
-            )}
+              <Button
+                text="Install Docker Compose"
+                color="primary"
+                endIcon={<ArrowForwardIcon />}
+              />
+            </a>
           </>
         </Grid>
         <LinkToDiscord />

@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React, { ReactElement, useEffect } from "react";
@@ -15,6 +15,7 @@ import { InstallWslWarningScreenshot } from "./InstallWslWarningScreenshot";
 import LinkToDiscord from "../../LinkToDiscord";
 import RowsContainer from "../../../common/components/RowsContainer";
 import InfoBar from "../../../common/components/InfoBar";
+import Button from "../../../common/components/input/button/Button";
 
 const WSL2_INSTALL_URL = "https://aka.ms/wsl2kernel";
 
@@ -70,16 +71,13 @@ const IncorrectWslSettings = (): ReactElement => {
       <Grid item container justify="flex-end">
         <Grid item container justify="flex-end">
           <Button
-            variant="contained"
+            text="Install WSL 2"
             color="primary"
-            disableElevation
             endIcon={<ArrowForwardIcon />}
             onClick={() => {
               (window as any).electron.openExternal(WSL2_INSTALL_URL);
             }}
-          >
-            Install WSL 2
-          </Button>
+          />
         </Grid>
         <LinkToDiscord />
       </Grid>
