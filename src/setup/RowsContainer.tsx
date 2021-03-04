@@ -8,7 +8,7 @@ export const SIDE_PADDING_UNIT = "vh";
 const useStyles = makeStyles(() =>
   createStyles({
     gridContainer: {
-      height: "100vh",
+      flex: 1,
       padding: `10vh ${SIDE_PADDING}${SIDE_PADDING_UNIT}`,
     },
   })

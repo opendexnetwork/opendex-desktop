@@ -20,8 +20,8 @@ import { isLinux } from "../../common/appUtil";
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
+      flex: 1,
       width: "100vw",
-      height: "100vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
