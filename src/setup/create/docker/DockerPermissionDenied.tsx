@@ -1,20 +1,14 @@
-import {
-  Button,
-  createStyles,
-  Grid,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { createStyles, Grid, makeStyles, Typography } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import React, { ReactElement, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { interval } from "rxjs";
 import { filter, mergeMap } from "rxjs/operators";
-import { isLinux } from "../../../common/utils/appUtil";
 import { isPermissionDenied$ } from "../../../common/utils/dockerUtil";
 import { Path } from "../../../router/Path";
 import LinkToDiscord from "../../LinkToDiscord";
 import RowsContainer from "../../../common/components/RowsContainer";
+import Button from "../../../common/components/input/button/Button";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -72,29 +66,23 @@ const DockerPermissionDenied = (): ReactElement => {
         <Grid item container justify="space-between">
           <>
             <Button
+              text="Cancel"
               variant="outlined"
-              disableElevation
               onClick={() => history.push(Path.HOME)}
+            />
+            <a
+              href="https://docs.docker.com/engine/install/linux-postinstall/"
+              className={classes.installLink}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Cancel
-            </Button>
-            {isLinux() && (
-              <a
-                href="https://docs.docker.com/engine/install/linux-postinstall/"
-                className={classes.installLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disableElevation
-                  endIcon={<ArrowForwardIcon />}
-                >
-                  Post-installation steps for Linux
-                </Button>
-              </a>
-            )}
+              <Button
+                text="Post-installation steps for Linux"
+                variant="contained"
+                color="primary"
+                endIcon={<ArrowForwardIcon />}
+              />
+            </a>
           </>
         </Grid>
         <LinkToDiscord />

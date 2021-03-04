@@ -4,14 +4,13 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import { inject, observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import { Link as RouterLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { timer } from "rxjs";
 import { delay, mergeMap, retryWhen } from "rxjs/operators";
 import api from "../api";
@@ -20,6 +19,7 @@ import { DOCKER_STORE } from "../stores/dockerStore";
 import { SETTINGS_STORE } from "../stores/settingsStore";
 import { WithStores } from "../stores/WithStores";
 import RowsContainer from "../common/components/RowsContainer";
+import Button from "../common/components/input/button/Button";
 
 type OpendexDockerNotDetectedProps = WithStores;
 
@@ -96,13 +96,11 @@ const OpendexDockerNotDetected = inject(
           )}
           <Grid container item alignItems="center" justify="center">
             <Button
-              component={RouterLink}
-              to={Path.HOME}
+              text="Go To Start Page"
               variant="outlined"
               endIcon={<ArrowForwardIcon />}
-            >
-              Go To Start Page
-            </Button>
+              onClick={() => history.push(Path.HOME)}
+            />
           </Grid>
         </Grid>
       </RowsContainer>

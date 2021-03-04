@@ -1,10 +1,4 @@
-import {
-  Button,
-  Grid,
-  Grow,
-  LinearProgress,
-  Typography,
-} from "@material-ui/core";
+import { Grid, Grow, LinearProgress, Typography } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -21,6 +15,7 @@ import { WithStores } from "../../stores/WithStores";
 import LinkToDiscord from "../LinkToDiscord";
 import RowsContainer from "../../common/components/RowsContainer";
 import OpendexLogo from "../../common/components/OpendexLogo";
+import Button from "../../common/components/input/button/Button";
 
 type StartingOpendexProps = WithStores;
 
@@ -118,13 +113,10 @@ const StartingOpendex = inject(SETTINGS_STORE)(
         </Grid>
         <Grid item container justify="center">
           <Button
+            text="Retry"
             color="primary"
-            variant="contained"
-            disableElevation
             onClick={() => history.push(Path.START_ENVIRONMENT)}
-          >
-            Retry
-          </Button>
+          />
           <LinkToDiscord />
         </Grid>
       </RowsContainer>

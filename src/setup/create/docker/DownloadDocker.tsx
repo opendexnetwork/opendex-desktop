@@ -1,10 +1,4 @@
-import {
-  Button,
-  createStyles,
-  Grid,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { createStyles, Grid, makeStyles, Typography } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -20,6 +14,7 @@ import { Path } from "../../../router/Path";
 import LinkToDiscord from "../../LinkToDiscord";
 import RowsContainer from "../../../common/components/RowsContainer";
 import InfoBar from "../../../common/components/InfoBar";
+import Button from "../../../common/components/input/button/Button";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -88,17 +83,14 @@ const DownloadDocker = (): ReactElement => {
           <Grid item container justify="space-between">
             <>
               <Button
+                text="Cancel"
                 variant="outlined"
-                disableElevation
                 onClick={() => history.push(Path.HOME)}
-              >
-                Cancel
-              </Button>
+              />
               {isWindows() && (
                 <Button
-                  variant="contained"
+                  text="Download Now"
                   color="primary"
-                  disableElevation
                   endIcon={<ArrowForwardIcon />}
                   onClick={() => {
                     setIsDownloading(true);
@@ -106,9 +98,7 @@ const DownloadDocker = (): ReactElement => {
                       history.push(Path.START_ENVIRONMENT)
                     );
                   }}
-                >
-                  Download Now
-                </Button>
+                />
               )}
               {!isWindows() && (
                 <a
@@ -118,13 +108,10 @@ const DownloadDocker = (): ReactElement => {
                   target="_blank"
                 >
                   <Button
-                    variant="contained"
+                    text="Install Docker"
                     color="primary"
-                    disableElevation
                     endIcon={<ArrowForwardIcon />}
-                  >
-                    Install Docker
-                  </Button>
+                  />
                 </a>
               )}
             </>

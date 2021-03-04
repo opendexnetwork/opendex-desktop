@@ -1,5 +1,4 @@
 import {
-  Button,
   ButtonBase,
   Card,
   CardContent,
@@ -23,6 +22,7 @@ import { DOCKER_STORE } from "../stores/dockerStore";
 import { SETTINGS_STORE } from "../stores/settingsStore";
 import RowsContainer from "../common/components/RowsContainer";
 import OpendexLogo from "../common/components/OpendexLogo";
+import Button from "../common/components/input/button/Button";
 
 type Item = {
   icon: ElementType;
@@ -135,16 +135,13 @@ const Landing = inject(
         >
           {!!selectedItem && (
             <Button
-              variant="contained"
+              text="Next"
               color="primary"
-              disableElevation
               endIcon={<ArrowForwardIcon />}
               onClick={() => {
                 history.push(selectedItem!.path);
               }}
-            >
-              Next
-            </Button>
+            />
           )}
         </Grid>
       </RowsContainer>

@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CheckIcon from "@material-ui/icons/Check";
 import React, { ReactElement, useEffect } from "react";
@@ -14,6 +14,7 @@ import {
 import LinkToDiscord from "../../LinkToDiscord";
 import RowsContainer from "../../../common/components/RowsContainer";
 import InfoBar from "../../../common/components/InfoBar";
+import Button from "../../../common/components/input/button/Button";
 
 const RestartRequired = (): ReactElement => {
   useEffect(() => {
@@ -56,18 +57,15 @@ const RestartRequired = (): ReactElement => {
       <Grid item container justify="flex-end">
         <Grid item container justify="flex-end">
           <Button
-            variant="contained"
+            text="Reboot PC"
             color="primary"
-            disableElevation
             endIcon={<ArrowForwardIcon />}
             onClick={() => {
               restart$().subscribe(() => {
                 window.close();
               });
             }}
-          >
-            Reboot PC
-          </Button>
+          />
         </Grid>
         <LinkToDiscord />
       </Grid>

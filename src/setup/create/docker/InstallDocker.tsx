@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import GetAppOutlinedIcon from "@material-ui/icons/GetAppOutlined";
 import React, { ReactElement, useState } from "react";
@@ -13,6 +13,7 @@ import { DockerInstallPromptScreenshot } from "./DockerInstallPromptScreenshot";
 import LinkToDiscord from "../../LinkToDiscord";
 import RowsContainer from "../../../common/components/RowsContainer";
 import InfoBar from "../../../common/components/InfoBar";
+import Button from "../../../common/components/input/button/Button";
 
 const InstallDocker = (): ReactElement => {
   const history = useHistory();
@@ -66,9 +67,8 @@ const InstallDocker = (): ReactElement => {
         {!isInstalling && (
           <Grid item container justify="flex-end">
             <Button
-              variant="contained"
+              text="Install Now"
               color="primary"
-              disableElevation
               endIcon={<ArrowForwardIcon />}
               onClick={() => {
                 setIsInstalling(true);
@@ -88,9 +88,7 @@ const InstallDocker = (): ReactElement => {
                     history.push(Path.START_ENVIRONMENT);
                   });
               }}
-            >
-              Install Now
-            </Button>
+            />
           </Grid>
         )}
         <LinkToDiscord />

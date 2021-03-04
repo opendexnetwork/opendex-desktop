@@ -1,10 +1,4 @@
-import {
-  Button,
-  Collapse,
-  createStyles,
-  makeStyles,
-  Theme,
-} from "@material-ui/core";
+import { Collapse, createStyles, makeStyles, Theme } from "@material-ui/core";
 import UpdateIcon from "@material-ui/icons/Update";
 import React, { ReactElement, useEffect, useState } from "react";
 import { timer } from "rxjs";
@@ -13,6 +7,8 @@ import api from "../../api";
 import { isDarwin, isWindows } from "../utils/appUtil";
 import WarningMessage from "./WarningMessage";
 import { getErrorMsg } from "../utils/errorUtil";
+import Button from "./input/button/Button";
+import TextButton from "./input/button/TextButton";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -91,16 +87,14 @@ const UpdateMessage = (): ReactElement => {
         additionalButtons={[
           {
             button: (
-              <Button
+              <TextButton
+                text="What's New"
                 size="small"
                 color="inherit"
-                disableElevation
                 onClick={() =>
                   (window as any).electron.openExternal(releaseUrl)
                 }
-              >
-                What's New
-              </Button>
+              />
             ),
             key: "releaseLink",
           },
@@ -108,13 +102,11 @@ const UpdateMessage = (): ReactElement => {
             button: (
               <a href={downloadUrl} className={classes.link}>
                 <Button
+                  text="Download"
                   size="small"
                   variant="outlined"
                   color="inherit"
-                  disableElevation
-                >
-                  Download
-                </Button>
+                />
               </a>
             ),
             key: "closeUpdateBtn",

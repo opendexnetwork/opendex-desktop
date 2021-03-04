@@ -5,9 +5,7 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Typography from "@material-ui/core/Typography";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -21,6 +19,8 @@ import { SETTINGS_STORE } from "../stores/settingsStore";
 import { WithStores } from "../stores/WithStores";
 import { ConnectionType } from "../enums";
 import RowsContainer from "../common/components/RowsContainer";
+import Button from "../common/components/input/button/Button";
+import TextField from "../common/components/input/text/TextField";
 
 type ConnectToRemoteProps = WithStores;
 
@@ -92,18 +92,15 @@ const ConnectToRemote = inject(SETTINGS_STORE)(
                   <TextField
                     id="ip-port"
                     label="IP:Port"
-                    variant="outlined"
                     value={ipAndPortWithoutHttp}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment
-                          className={classes.adornmentMargin}
-                          position="start"
-                        >
-                          https://
-                        </InputAdornment>
-                      ),
-                    }}
+                    startAdornment={
+                      <InputAdornment
+                        className={classes.adornmentMargin}
+                        position="start"
+                      >
+                        https://
+                      </InputAdornment>
+                    }
                     onChange={(e) => {
                       setConnectionFailed(false);
                       setIpAndPort(`https://${e.target.value}`);
@@ -131,11 +128,10 @@ const ConnectToRemote = inject(SETTINGS_STORE)(
                 <Grid item container justify="center">
                   <div className={classes.buttonWrapper}>
                     <Button
+                      text={connectionFailed ? "Retry" : "Connect"}
                       type="submit"
-                      variant="contained"
                       color="primary"
                       disabled={connecting}
-                      disableElevation
                       onClick={(e) => {
                         e.preventDefault();
                         handleConnectClick(
@@ -147,9 +143,7 @@ const ConnectToRemote = inject(SETTINGS_STORE)(
                           settingsStore!.setConnectionType
                         );
                       }}
-                    >
-                      {connectionFailed ? "Retry" : "Connect"}
-                    </Button>
+                    />
                     {connecting && (
                       <CircularProgress
                         color="inherit"
@@ -165,13 +159,11 @@ const ConnectToRemote = inject(SETTINGS_STORE)(
         </Grid>
         <Grid item container>
           <Button
+            text="Back"
             variant="outlined"
-            disableElevation
             onClick={() => history.push(Path.HOME)}
             startIcon={<ArrowBackIcon />}
-          >
-            Back
-          </Button>
+          />
         </Grid>
       </RowsContainer>
     );
