@@ -8,15 +8,11 @@ import { Path } from "../router/Path";
 import { SETTINGS_STORE } from "../stores/settingsStore";
 import { WithStores } from "../stores/WithStores";
 import { handleEvent } from "./eventHandler";
-import UpdateMessage from "./UpdateMessage";
 
 type DashboardProps = WithStores;
 
 const useStyles = makeStyles(() =>
   createStyles({
-    wrapper: {
-      height: "100%",
-    },
     iframeContainer: {
       display: "flex",
       flex: 1,
@@ -55,17 +51,12 @@ const Dashboard = inject(SETTINGS_STORE)(
       }, [history, settingsStore]);
 
       return (
-        <Grid container direction="column" className={classes.wrapper}>
-          <Grid item container>
-            <UpdateMessage />
-          </Grid>
-          <Grid item container className={classes.iframeContainer}>
-            <iframe
-              className={classes.iframe}
-              src={settingsStore!.opendexDockerUrl}
-              title="OpenDEX UI"
-            />
-          </Grid>
+        <Grid item container className={classes.iframeContainer}>
+          <iframe
+            className={classes.iframe}
+            src={settingsStore!.opendexDockerUrl}
+            title="OpenDEX UI"
+          />
         </Grid>
       );
     }
