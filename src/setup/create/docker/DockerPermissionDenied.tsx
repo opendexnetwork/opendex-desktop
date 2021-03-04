@@ -10,11 +10,11 @@ import React, { ReactElement, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { interval } from "rxjs";
 import { filter, mergeMap } from "rxjs/operators";
-import { isLinux } from "../../common/appUtil";
-import { isDockerComposeInstalled$ } from "../../common/dockerUtil";
-import { Path } from "../../router/Path";
-import LinkToDiscord from "../LinkToDiscord";
-import RowsContainer from "../RowsContainer";
+import { isLinux } from "../../../common/utils/appUtil";
+import { isPermissionDenied$ } from "../../../common/utils/dockerUtil";
+import { Path } from "../../../router/Path";
+import LinkToDiscord from "../../LinkToDiscord";
+import RowsContainer from "../../../common/components/RowsContainer";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -24,18 +24,21 @@ const useStyles = makeStyles(() =>
     installLink: {
       textDecoration: "none",
     },
+    stepsContainer: {
+      width: "657px",
+    },
   })
 );
 
-const InstallDockerCompose = (): ReactElement => {
+const DockerPermissionDenied = (): ReactElement => {
   const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
     const subscription = interval(5000)
       .pipe(
-        mergeMap(() => isDockerComposeInstalled$()),
-        filter((isInstalled) => isInstalled)
+        mergeMap(() => isPermissionDenied$()),
+        filter((isPermissionDenied) => !isPermissionDenied)
       )
       .subscribe(() => {
         history.push(Path.START_ENVIRONMENT);
@@ -45,11 +48,19 @@ const InstallDockerCompose = (): ReactElement => {
 
   return (
     <RowsContainer>
-      <Grid item container justify="center">
-        <Typography variant="h6" component="h2" align="center">
-          Docker Compose not detected. In order to create a new OpenDEX
-          environment, you need to get Docker Compose.
-        </Typography>
+      <Grid item container direction="column">
+        <Grid item container justify="center">
+          <Typography variant="h6" component="h2" align="center">
+            Docker permission denied. Please follow the post-installation steps
+            and:
+          </Typography>
+        </Grid>
+        <Grid item container justify="center">
+          <ul className={classes.stepsContainer}>
+            <li>Log out and log back in</li>
+            <li>Restart your machine if still seeing this</li>
+          </ul>
+        </Grid>
       </Grid>
       <Grid
         item
@@ -69,7 +80,7 @@ const InstallDockerCompose = (): ReactElement => {
             </Button>
             {isLinux() && (
               <a
-                href="https://docs.docker.com/compose/install/"
+                href="https://docs.docker.com/engine/install/linux-postinstall/"
                 className={classes.installLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -80,7 +91,7 @@ const InstallDockerCompose = (): ReactElement => {
                   disableElevation
                   endIcon={<ArrowForwardIcon />}
                 >
-                  Install Docker Compose
+                  Post-installation steps for Linux
                 </Button>
               </a>
             )}
@@ -92,4 +103,4 @@ const InstallDockerCompose = (): ReactElement => {
   );
 };
 
-export default InstallDockerCompose;
+export default DockerPermissionDenied;

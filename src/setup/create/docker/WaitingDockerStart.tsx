@@ -1,13 +1,16 @@
 import { Grid, Typography } from "@material-ui/core";
 import React, { ReactElement, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Path } from "../router/Path";
-import LinkToDiscord from "./LinkToDiscord";
-import RowsContainer from "./RowsContainer";
-import InfoBar from "./create/InfoBar";
+import { Path } from "../../../router/Path";
+import LinkToDiscord from "../../LinkToDiscord";
+import RowsContainer from "../../../common/components/RowsContainer";
+import InfoBar from "../../../common/components/InfoBar";
 import { interval } from "rxjs";
 import { filter, mergeMap, take } from "rxjs/operators";
-import { isDockerRunning$, startDocker$ } from "../common/dockerUtil";
+import {
+  isDockerRunning$,
+  startDocker$,
+} from "../../../common/utils/dockerUtil";
 
 const WaitingDockerStart = (): ReactElement => {
   const history = useHistory();

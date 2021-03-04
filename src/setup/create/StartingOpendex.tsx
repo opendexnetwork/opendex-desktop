@@ -11,16 +11,16 @@ import { useHistory } from "react-router-dom";
 import { interval } from "rxjs";
 import { catchError, mergeMap, take, takeUntil } from "rxjs/operators";
 import api from "../../api";
-import { logError, logInfo } from "../../common/appUtil";
-import { startOpendexDocker$ } from "../../common/dockerUtil";
+import { logError, logInfo } from "../../common/utils/appUtil";
+import { startOpendexDocker$ } from "../../common/utils/dockerUtil";
 import { OPENDEX_DOCKER_LOCAL_TESTNET_URL } from "../../constants";
 import { ConnectionType } from "../../enums";
 import { Path } from "../../router/Path";
 import { SETTINGS_STORE } from "../../stores/settingsStore";
 import { WithStores } from "../../stores/WithStores";
 import LinkToDiscord from "../LinkToDiscord";
-import RowsContainer from "../RowsContainer";
-import OpendexLogo from "../OpendexLogo";
+import RowsContainer from "../../common/components/RowsContainer";
+import OpendexLogo from "../../common/components/OpendexLogo";
 
 type StartingOpendexProps = WithStores;
 

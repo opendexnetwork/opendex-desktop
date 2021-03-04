@@ -10,16 +10,16 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { interval, Subscription } from "rxjs";
 import { filter, mergeMap } from "rxjs/operators";
-import { isWindows } from "../../common/appUtil";
+import { isWindows } from "../../../common/utils/appUtil";
 import {
   downloadDocker$,
   isDockerInstalled$,
   isPermissionDenied$,
-} from "../../common/dockerUtil";
-import { Path } from "../../router/Path";
-import LinkToDiscord from "../LinkToDiscord";
-import RowsContainer from "../RowsContainer";
-import InfoBar from "./InfoBar";
+} from "../../../common/utils/dockerUtil";
+import { Path } from "../../../router/Path";
+import LinkToDiscord from "../../LinkToDiscord";
+import RowsContainer from "../../../common/components/RowsContainer";
+import InfoBar from "../../../common/components/InfoBar";
 
 const useStyles = makeStyles(() =>
   createStyles({

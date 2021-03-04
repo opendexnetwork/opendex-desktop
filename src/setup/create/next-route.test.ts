@@ -2,7 +2,7 @@ import { getNextRoute } from "./next-route";
 import { TestScheduler } from "rxjs/testing";
 import { Path } from "../../router/Path";
 import { Observable } from "rxjs";
-import { DockerSettings } from "../../common/dockerUtil";
+import { DockerSettings } from "../../common/utils/dockerUtil";
 
 let testScheduler: TestScheduler;
 

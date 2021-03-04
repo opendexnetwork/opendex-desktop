@@ -9,12 +9,12 @@ import {
   DockerSettings,
   dockerSettings$,
   isWSL2$,
-} from "../../common/dockerUtil";
-import { Path } from "../../router/Path";
-import { InstallWslWarningScreenshot } from "../InstallWslWarningScreenshot";
-import LinkToDiscord from "../LinkToDiscord";
-import RowsContainer from "../RowsContainer";
-import InfoBar from "./InfoBar";
+} from "../../../common/utils/dockerUtil";
+import { Path } from "../../../router/Path";
+import { InstallWslWarningScreenshot } from "./InstallWslWarningScreenshot";
+import LinkToDiscord from "../../LinkToDiscord";
+import RowsContainer from "../../../common/components/RowsContainer";
+import InfoBar from "../../../common/components/InfoBar";
 
 const WSL2_INSTALL_URL = "https://aka.ms/wsl2kernel";
 

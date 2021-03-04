@@ -9,10 +9,10 @@ import UpdateIcon from "@material-ui/icons/Update";
 import React, { ReactElement, useEffect, useState } from "react";
 import { timer } from "rxjs";
 import { mergeMap, retry } from "rxjs/operators";
-import api from "../api";
-import { isDarwin, isWindows } from "../common/appUtil";
-import WarningMessage from "../common/components/WarningMessage";
-import { getErrorMsg } from "../common/errorUtil";
+import api from "../../api";
+import { isDarwin, isWindows } from "../utils/appUtil";
+import WarningMessage from "./WarningMessage";
+import { getErrorMsg } from "../utils/errorUtil";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

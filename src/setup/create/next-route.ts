@@ -1,7 +1,7 @@
 import { combineLatest, Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
-import { logInfo } from "../../common/appUtil";
-import { DockerSettings } from "../../common/dockerUtil";
+import { logInfo } from "../../common/utils/appUtil";
+import { DockerSettings } from "../../common/utils/dockerUtil";
 import { Path } from "../../router/Path";
 
 const getNextRoute = (
@@ -27,9 +27,9 @@ const getNextRoute = (
     isDockerComposeInstalled(),
     isPermissionDenied(),
   ]).pipe(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     map(
       ([
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _,
         isInstalled,
         isRunning,

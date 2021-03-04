@@ -16,13 +16,13 @@ import PowerTwoToneIcon from "@material-ui/icons/PowerTwoTone";
 import { inject, observer } from "mobx-react";
 import React, { ElementType, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { isOpendexDockerEnvCreated } from "../common/dockerUtil";
+import { isOpendexDockerEnvCreated } from "../common/utils/dockerUtil";
 import { Network } from "../enums";
 import { Path } from "../router/Path";
 import { DOCKER_STORE } from "../stores/dockerStore";
 import { SETTINGS_STORE } from "../stores/settingsStore";
-import RowsContainer from "./RowsContainer";
-import OpendexLogo from "./OpendexLogo";
+import RowsContainer from "../common/components/RowsContainer";
+import OpendexLogo from "../common/components/OpendexLogo";
 
 type Item = {
   icon: ElementType;

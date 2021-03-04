@@ -19,8 +19,8 @@ import api from "../api";
 import { Path } from "../router/Path";
 import { SETTINGS_STORE } from "../stores/settingsStore";
 import { WithStores } from "../stores/WithStores";
-import RowsContainer from "./RowsContainer";
 import { ConnectionType } from "../enums";
+import RowsContainer from "../common/components/RowsContainer";
 
 type ConnectToRemoteProps = WithStores;
 

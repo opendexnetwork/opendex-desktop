@@ -13,9 +13,9 @@ import {
   rebootRequired$,
   isDockerComposeInstalled$,
   isPermissionDenied$,
-} from "../../common/dockerUtil";
+} from "../../common/utils/dockerUtil";
 import { getNextRoute } from "./next-route";
-import { isLinux } from "../../common/appUtil";
+import { isLinux } from "../../common/utils/appUtil";
 
 const useStyles = makeStyles(() =>
   createStyles({
