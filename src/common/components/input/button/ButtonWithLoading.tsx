@@ -6,20 +6,18 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import Button from "./Button";
+import Button, { ButtonProps } from "./Button";
 
 type ButtonWithLoadingProps = {
-  onClick: () => void;
   text: string;
   disabled?: boolean;
   loading?: boolean;
   submitButton?: boolean;
   fullWidth?: boolean;
-  size?: "small" | "medium" | "large";
   color?: "primary" | "secondary";
   error?: boolean;
   helperText?: string;
-};
+} & ButtonProps;
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -39,16 +37,15 @@ const useStyles = makeStyles(() =>
 const ButtonWithLoading = (props: ButtonWithLoadingProps): ReactElement => {
   const classes = useStyles();
   const {
-    onClick,
     text,
     disabled,
     loading,
     submitButton,
     fullWidth,
-    size,
     color,
     error,
     helperText,
+    ...buttonProps
   } = props;
 
   return (
@@ -58,10 +55,9 @@ const ButtonWithLoading = (props: ButtonWithLoadingProps): ReactElement => {
           text={text}
           type={submitButton ? "submit" : "button"}
           color={color || "primary"}
-          onClick={onClick}
           disabled={disabled}
           fullWidth={fullWidth}
-          size={size}
+          {...buttonProps}
         />
         {loading && (
           <CircularProgress
