@@ -1,10 +1,4 @@
-import {
-  CircularProgress,
-  createStyles,
-  Fade,
-  makeStyles,
-  Theme,
-} from "@material-ui/core";
+import { createStyles, Fade, makeStyles, Theme } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Typography from "@material-ui/core/Typography";
@@ -21,6 +15,7 @@ import { ConnectionType } from "../enums";
 import RowsContainer from "../common/components/RowsContainer";
 import Button from "../common/components/input/button/Button";
 import TextField from "../common/components/input/text/TextField";
+import ButtonWithLoading from "../common/components/input/button/ButtonWithLoading";
 
 type ConnectToRemoteProps = WithStores;
 
@@ -28,17 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rowGroup: {
       padding: theme.spacing(5),
-    },
-    buttonWrapper: {
-      margin: theme.spacing(1),
-      position: "relative",
-    },
-    buttonProgress: {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      marginTop: -12,
-      marginLeft: -12,
     },
     adornmentMargin: {
       marginRight: 0,
@@ -126,32 +110,23 @@ const ConnectToRemote = inject(SETTINGS_STORE)(
                   </Fade>
                 </Grid>
                 <Grid item container justify="center">
-                  <div className={classes.buttonWrapper}>
-                    <Button
-                      text={connectionFailed ? "Retry" : "Connect"}
-                      type="submit"
-                      color="primary"
-                      disabled={connecting}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleConnectClick(
-                          setConnectionFailed,
-                          setConnecting,
-                          history,
-                          ipAndPort,
-                          settingsStore!.setOpendexDockerUrl,
-                          settingsStore!.setConnectionType
-                        );
-                      }}
-                    />
-                    {connecting && (
-                      <CircularProgress
-                        color="inherit"
-                        size={24}
-                        className={classes.buttonProgress}
-                      />
-                    )}
-                  </div>
+                  <ButtonWithLoading
+                    text={connectionFailed ? "Retry" : "Connect"}
+                    submitButton
+                    disabled={connecting}
+                    loading={connecting}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleConnectClick(
+                        setConnectionFailed,
+                        setConnecting,
+                        history,
+                        ipAndPort,
+                        settingsStore!.setOpendexDockerUrl,
+                        settingsStore!.setConnectionType
+                      );
+                    }}
+                  />
                 </Grid>
               </Grid>
             </form>
